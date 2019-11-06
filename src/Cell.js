@@ -7,11 +7,11 @@ class Cell extends Component {
         this.handleClick = this.handleClick.bind(this)
     }
     handleClick(e) {
-
+        this.props.flipGroupedCells()
     }
     render() {
         const classes = 'Cell' + (this.props.isOn? ' Cell-on': '')
-        return <td className={classes} ></td>
+        return <td className={classes} onClick={this.handleClick}></td>
     }
 }
 export default Cell

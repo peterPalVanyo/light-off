@@ -17,6 +17,23 @@ class Board extends Component {
             board:this.createBoard()
         }
     }
+    flipGroupedCells(coord) {
+        let isOver = false
+        let {ncols, nrows} = this.props
+        let board = this.state.board
+        let [y, x] = coord.split("-").map(Number)
+        function flipCell(y, x) {
+            if(x>=0 && x<ncols && y>=0 && y<nrows) {
+                board[y][x] = !board[y][x]
+            }
+        }
+        flipCell(y, x)
+        flipCell(y+1, x)
+        flipCell(y-1, x)
+        flipCell(y, x+1)
+        flipCell(y, x-1)
+        this.setState({board, isOver})
+    }
     createBoard(){
         let board = []
         for(let i=0; i<this.props.nrows; i++) {
@@ -31,13 +48,15 @@ class Board extends Component {
     }
     render() {
         let tblBoard = []
-        for(let x= 0; x<this.props.nrows; x++) {
+        for(let y= 0; y<this.props.nrows; y++) {
             let row =[] 
-            for (let y = 0; y<this.props.ncols; y++) {
+            for (let x = 0; x<this.props.ncols; x++) {
                 let coord=`${y}-${x}`
-                row.push(<Cell key={coord} isOn={this.state.board[y][x]} />)
+                row.push(<Cell key={coord} 
+                isOn={this.state.board[y][x]} 
+                flipGroupedCells={() => this.flipGroupedCells(coord)} />)
             }
-            tblBoard.push(<tr key={x} >{row}</tr>)
+            tblBoard.push(<tr key={y} >{row}</tr>)
         }
         return (
             <table className='Board'>
