@@ -7,7 +7,7 @@ class Board extends Component {
     static defaultProps = {
         nrows: 5,
         ncols: 5,
-        chanceToLightOn: 0.4
+        chanceToLightOn: 0.2
     }
 
     constructor(props) {
@@ -18,7 +18,6 @@ class Board extends Component {
         }
     }
     flipGroupedCells(coord) {
-        let isOver = false
         let {ncols, nrows} = this.props
         let board = this.state.board
         let [y, x] = coord.split("-").map(Number)
@@ -32,6 +31,7 @@ class Board extends Component {
         flipCell(y-1, x)
         flipCell(y, x+1)
         flipCell(y, x-1)
+        let isOver = board.every(row => row.every(cell => !cell))
         this.setState({board, isOver})
     }
     createBoard(){
@@ -47,6 +47,9 @@ class Board extends Component {
         return board
     }
     render() {
+        if(this.state.isOver) {
+            return <h1>You won!</h1>
+        }
         let tblBoard = []
         for(let y= 0; y<this.props.nrows; y++) {
             let row =[] 
